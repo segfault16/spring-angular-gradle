@@ -102,3 +102,76 @@ processResources.dependsOn('frontend:build')
 Check: Run `./gradlew tasks` in the root folder to check that the Node Tasks are available
 
 Check: Repackage the entire server `./gradlew bootRepackage` and execute `java -jar build/libs/spring-angular-0.0.1-SNAPSHOT.jar`. You should now see the Angular UI on `http://localhost:8080`.
+
+### Step 6: Add REST-Controller and Angular proxy configuration
+
+Now we can add some REST-Controller to our Spring Boot Server, e.g.:
+
+```
+package com.segfault16.springangular.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+@Controller
+@RequestMapping("api/welcome")
+public class WelcomeController {
+
+    @RequestMapping(method = RequestMethod.GET)
+    public @ResponseBody String getWelcome() {
+        return "Welcome to Spring Boot Server!";
+    }
+}
+
+```
+
+Check: `http://localhost:8080/api/welcome` should return `Welcome to Spring Boot Server!`
+
+Now create a service and consume the API in Angular, e.g.:
+
+```
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {Observable} from 'rxjs/Observable';
+
+@Injectable()
+export class WelcomeService{
+    constructor(private http: HttpClient) {
+
+    }
+
+    public getWelcomeMessage() : Observable<string> {
+        return this.http.get('/api/welcome', {responseType: 'text'});
+    }
+}
+```
+
+Check: Repackage the entire server `./gradlew bootRepackage` and execute `java -jar build/libs/spring-angular-0.0.1-SNAPSHOT.jar`. You should now see the Angular UI on `http://localhost:8080` with the welcome message provided by the API.
+
+For local development in Angular, we can add a proxy configuration `proxy.conf.json` to redirect to the Spring Boot Server:
+
+```
+{
+  "/api": {
+    "target": "http://localhost:8080/api",
+    "changeOrigin": true,
+    "secure": false,
+    "pathRewrite": {
+      "^/api": ""
+    },
+    "logLevel": "debug"
+  }
+}
+```
+
+and set this proxy configuration as default when starting the Angular UI via `npm start`:
+
+```
+...
+"start": "ng serve --proxy-config proxy.conf.json",
+...
+```
+
+Now all requests to `/api/*` of the Angular UI running on `http://localhost:4200` are redirected to the Spring Boot Server running on `http://localhost:8080`.
