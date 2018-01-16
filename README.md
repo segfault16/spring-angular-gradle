@@ -65,3 +65,12 @@ build.dependsOn(npm_install)
 Copy `gradlew`, `gradlew.bat` and `gradle` folder from parent folder: `cp -r ../gradle* .`
 
 Check: Run `./gradlew npm_version` to inspect the version information of npm provided by the gradle node plugin.
+
+### Step 4: Create new Angular project
+
+In the frontend directory, execute `ng new frontend --skip-git --directory .` to create a new angular project. 
+I assume you have installed angular/cli on your local machine.
+
+Check: Run `ng serve` or `npm start` and inspect the Angular UI on `http://localhost:4200`
+
+Another Check: Run the `npm start` via gradle: `./gradlew npm_start`

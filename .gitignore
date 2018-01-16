@@ -23,3 +23,9 @@ nbbuild/
 dist/
 nbdist/
 .nb-gradle/
+
+### Node
+frontend/node_modules/
+
+### Atom
+.editorconfig
