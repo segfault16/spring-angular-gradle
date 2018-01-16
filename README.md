@@ -74,3 +74,31 @@ I assume you have installed angular/cli on your local machine.
 Check: Run `ng serve` or `npm start` and inspect the Angular UI on `http://localhost:4200`
 
 Another Check: Run the `npm start` via gradle: `./gradlew npm_start`
+
+### Step 5: Integrate Angular into Spring
+
+In order to build the frontend project from the directory of the Spring project and to include the developed Angular UI into the Spring Server, add a `settings.gradle` into the root folder with the following content:
+
+```
+include 'frontend'
+```
+
+and add the following lines to `build.gradle` in the root folder:
+
+```
+...
+jar {
+	baseName = 'spring-angular'
+	version = '0.0.1-SNAPSHOT'
+	from('frontend/dist') {
+		into 'public'
+	}
+}
+
+processResources.dependsOn('frontend:build')
+...
+```
+
+Check: Run `./gradlew tasks` in the root folder to check that the Node Tasks are available
+
+Check: Repackage the entire server `./gradlew bootRepackage` and execute `java -jar build/libs/spring-angular-0.0.1-SNAPSHOT.jar`. You should now see the Angular UI on `http://localhost:8080`.
