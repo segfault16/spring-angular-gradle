@@ -2,12 +2,41 @@
 
 This project aims at setting up a Spring Boot Server with Angular 4 UI that can be build by gradle.
 
+## Getting started
+
+To run the final server, build the jar:
+
+```
+./gradlew bootRepackage
+```
+
+and run the server:
+
+```
+java -jar build/libs/spring-angular-0.0.1-SNAPSHOT.jar
+```
+
+Navigate to `http://localhost:8080` to see the Angular Start Page with a custom Welcome message from the REST API.
+
+## Development
+
+When developing either the Spring Boot Server for the REST API or the Angular UI, the servers can be started and developed independently. For example:
+
+```
+Start the Spring Boot Server on http://localhost:8080
+./gradlew bootRun
+```
+
+```
+Start the Angular webpack development server on http://localhost:4200 with redirect to the REST API
+./gradlew npm_start
+```
+
 ## Set up your own
 
 ### Prerequisites
 
 - Installed java
-- Install gradle
 
 ### Step 1: Generate Spring Project
 
